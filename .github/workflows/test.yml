@@ -1,6 +1,6 @@
 name: Test Python App
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   test:
@@ -13,10 +13,15 @@ jobs:
       - name: Installer Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
-      - name: Installer pytest
-        run: pip install pytest
+      - name: Installer les dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Vérifier que le modèle existe
+        run: test -f model/model.joblib
 
       - name: Lancer les tests
         run: pytest
